@@ -1,12 +1,15 @@
 package com.tobilko.controller;
 
+import com.google.inject.Singleton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 
+
 /**
  * Created by Andrew Tobilko on 9/7/17.
  */
+@Singleton
 public final class MainController {
 
     @FXML
@@ -15,7 +18,6 @@ public final class MainController {
                 Alert.AlertType.INFORMATION,
                 "Designed by Andrew Tobilko, 2017"
         ).show();
-
     }
 
 }
