@@ -18,6 +18,8 @@ import com.tobilko.controller.Controller;
 import com.tobilko.controller.MainController;
 import com.tobilko.controller.MenuController;
 import com.tobilko.data.account.Account;
+import com.tobilko.data.account.principal.storage.PrincipalStorage;
+import com.tobilko.data.account.principal.storage.PrincipalStorageProvider;
 import com.tobilko.data.role.Role;
 import com.tobilko.data.storage.AccountStorage;
 import com.tobilko.data.storage.SimpleAccountStorageProvider;
@@ -31,15 +33,22 @@ public final class ApplicationModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        configureBinder();
+        configureMultiBinder();
+    }
+
+    private void configureBinder() {
         bind(MenuController.class).asEagerSingleton();
         bind(AccountStorage.class).toInstance(getAccountStorage());
+        bind(PrincipalStorage.class).to(PrincipalStorageProvider.class).asEagerSingleton();
+    }
 
+    private void configureMultiBinder() {
         Multibinder<Controller> controllerBinder =
                 Multibinder.newSetBinder(binder(), Controller.class);
 
         controllerBinder.addBinding().to(MenuController.class);
         controllerBinder.addBinding().to(AccountStorageController.class);
-
     }
 
     private AccountStorage getAccountStorage() {

@@ -3,7 +3,7 @@ package com.tobilko;
 import com.tobilko.configuration.ApplicationStarterConfigurator;
 import javafx.stage.Stage;
 
-public class Application extends javafx.application.Application {
+public final class Application extends javafx.application.Application {
 
     public static void main(String[] args) {
         launch(args);
