@@ -13,10 +13,7 @@ import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.ProvisionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import com.tobilko.controller.AccountStorageController;
-import com.tobilko.controller.Controller;
-import com.tobilko.controller.MainController;
-import com.tobilko.controller.MenuController;
+import com.tobilko.controller.*;
 import com.tobilko.data.account.Account;
 import com.tobilko.data.account.principal.storage.PrincipalStorage;
 import com.tobilko.data.account.principal.storage.PrincipalStorageProvider;
@@ -49,6 +46,7 @@ public final class ApplicationModule extends AbstractModule {
 
         controllerBinder.addBinding().to(MenuController.class);
         controllerBinder.addBinding().to(AccountStorageController.class);
+        controllerBinder.addBinding().to(AuthorisationController.class);
     }
 
     private AccountStorage getAccountStorage() {

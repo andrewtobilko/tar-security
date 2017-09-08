@@ -11,8 +11,8 @@ public interface PrincipalStorage {
 
     Optional<RolePrincipal> getPrincipal();
 
-    boolean putPrincipalIntoStorage(RolePrincipal principal);
+    void putPrincipalIntoStorage(RolePrincipal principal);
 
-    boolean clearStorage();
+    void clearStorage();
 
 }

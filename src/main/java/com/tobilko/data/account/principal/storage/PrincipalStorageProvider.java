@@ -17,25 +17,13 @@ public final class PrincipalStorageProvider implements PrincipalStorage {
     }
 
     @Override
-    public boolean putPrincipalIntoStorage(RolePrincipal principal) {
-        if (principal.getName() == null || principal.getName().equals(this.principal.getName())) {
-            return false;
-        }
-
+    public void putPrincipalIntoStorage(RolePrincipal principal) {
         this.principal = principal;
-
-        return true;
     }
 
     @Override
-    public boolean clearStorage() {
-        if (principal == null) {
-            return false;
-        }
-
+    public void clearStorage() {
         this.principal = null;
-
-        return true;
     }
 
 }

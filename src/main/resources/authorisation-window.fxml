@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+          fx:controller="com.tobilko.controller.AuthorisationController">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="30"/>
+        <ColumnConstraints percentWidth="70"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="33"/>
+        <RowConstraints percentHeight="33"/>
+        <RowConstraints percentHeight="33"/>
+    </rowConstraints>
+
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="0">Name:</Label>
+    <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0">name</TextField>
+
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="1">Password:</Label>
+    <TextField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1">password</TextField>
+
+    <Button GridPane.columnIndex="0" GridPane.rowIndex="2" onAction="#validateCredentials">Log in</Button>
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#closeAuthorisationWindow">Close</Button>
+</GridPane>

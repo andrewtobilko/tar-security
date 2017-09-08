@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<GridPane prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+          fx:controller="com.tobilko.controller.AuthorisationController">
+    <Button GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER" onAction="#handleLogInAction"
+            fx:id="logInButton">
+        Log in
+    </Button>
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.halignment="CENTER" disable="true"
+            onAction="#handleLogOutAction" fx:id="logOutButton">Log out
+    </Button>
+</GridPane>

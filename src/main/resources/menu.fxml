@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.GridPane?>
+<GridPane prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+          fx:controller="com.tobilko.controller.MenuController">
+    <MenuBar disable="true">
+        <Menu mnemonicParsing="false" text="Accounts">
+            <MenuItem text="Create an account"/>
+            <MenuItem text="Remove the account"/>
+            <MenuItem text="Edit the account"/>
+            <MenuItem text="Exit"/>
+        </Menu>
+        <Menu text="Information">
+            <MenuItem text="About" id="#informationMenuItem" onAction="#handleDeveloperInformationButtonClick"/>
+        </Menu>
+    </MenuBar>
+</GridPane>
