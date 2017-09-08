@@ -6,4 +6,5 @@ package com.tobilko.data.action;
 public enum Action {
 
 
+
 }

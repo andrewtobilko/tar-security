@@ -1,5 +1,6 @@
 package com.tobilko.data.role;
 
+import com.google.common.collect.ImmutableList;
 import com.tobilko.data.action.Action;
 import lombok.Getter;
 
@@ -11,8 +12,8 @@ import java.util.List;
  */
 public enum Role {
 
-    ADMIN(new ArrayList<>()),
-    ORDINARY_USER(new ArrayList<>());
+    ADMIN(ImmutableList.of()),
+    ORDINARY_USER(ImmutableList.of());
 
     @Getter
     private List<Action> abilities;
