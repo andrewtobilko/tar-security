@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
           fx:controller="com.tobilko.controller.AuthorisationController">
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
     <columnConstraints>
         <ColumnConstraints percentWidth="30"/>
         <ColumnConstraints percentWidth="70"/>
@@ -15,11 +19,13 @@
     </rowConstraints>
 
     <Label GridPane.columnIndex="0" GridPane.rowIndex="0">Name:</Label>
-    <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0">name</TextField>
+    <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0">Andrew</TextField>
 
     <Label GridPane.columnIndex="0" GridPane.rowIndex="1">Password:</Label>
-    <TextField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1">password</TextField>
+    <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1">000</PasswordField>
 
     <Button GridPane.columnIndex="0" GridPane.rowIndex="2" onAction="#validateCredentials">Log in</Button>
-    <Button GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#closeAuthorisationWindow">Close</Button>
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#closeAuthorisationWindow"
+            GridPane.halignment="RIGHT">Close
+    </Button>
 </GridPane>
