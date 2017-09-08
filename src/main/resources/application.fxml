@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.GridPane?>
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
           prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
-          fx:controller="com.tobilko.controller.InformationController">
+          fx:controller="com.tobilko.controller.MenuController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="Accounts">
             <MenuItem text="Create an account"/>

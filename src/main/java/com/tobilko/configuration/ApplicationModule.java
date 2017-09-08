@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
-import com.tobilko.controller.InformationController;
+import com.google.inject.multibindings.Multibinder;
+import com.tobilko.controller.AccountStorageController;
+import com.tobilko.controller.Controller;
+import com.tobilko.controller.MenuController;
 import com.tobilko.data.account.Account;
 import com.tobilko.data.storage.AccountStorage;
 import com.tobilko.data.storage.SimpleAccountStorageProvider;
@@ -18,17 +21,17 @@ public final class ApplicationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(InformationController.class).asEagerSingleton();
-        //bind(AccountStorage.class).to(SimpleAccountStorageProvider.class).asEagerSingleton();
+        bind(MenuController.class).asEagerSingleton();
+        bind(AccountStorage.class).toInstance(getAccountStorage());
+
+        Multibinder<Controller> controllerBinder =
+                Multibinder.newSetBinder(binder(), Controller.class);
+
+        controllerBinder.addBinding().to(MenuController.class);
+        controllerBinder.addBinding().to(AccountStorageController.class);
     }
 
-    @Singleton
-    public EventBus getEventBus() {
-        return new EventBus();
-    }
-
-    @Singleton
-    public AccountStorage getAccountStorage() {
+    private AccountStorage getAccountStorage() {
         return SimpleAccountStorageProvider.getAccountStorageWithInitialState(getInitialAccounts());
     }
 
@@ -38,6 +41,11 @@ public final class ApplicationModule extends AbstractModule {
                 new Account("Ann", "111"),
                 new Account("Mike", "222")
         );
+    }
+
+    @Singleton
+    public EventBus getEventBus() {
+        return new EventBus();
     }
 
 }
