@@ -10,7 +10,7 @@ import javafx.scene.control.Alert;
  * Created by Andrew Tobilko on 9/7/17.
  */
 @Singleton
-public final class MainController {
+public final class InformationController {
 
     @FXML
     public void handleDeveloperInformationButtonClick(ActionEvent event) {
