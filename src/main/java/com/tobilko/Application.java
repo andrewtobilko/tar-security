@@ -55,7 +55,6 @@ public class Application
             bind(MainController.class).asEagerSingleton();
         }
 
-        //@Provides
         @Singleton
         EventBus getEventBus() {
             return new EventBus();

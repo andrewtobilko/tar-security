@@ -7,5 +7,9 @@ repositories {
 dependencies {
     compile 'com.google.guava:guava:23.0',
             'org.projectlombok:lombok:1.16.18',
-            'com.google.inject:guice:4.1.0'
+            'com.google.inject:guice:4.1.0',
+            // https://mvnrepository.com/artifact/org.jsoup/jsoup
+            'org.jsoup:jsoup:1.10.3'
+
+
 }
