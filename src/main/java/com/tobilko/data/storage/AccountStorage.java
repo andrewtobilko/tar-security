@@ -12,7 +12,9 @@ public interface AccountStorage {
     Optional<Account> getAccountByName(String name);
 
     void removeAccount(Account account);
+
     void saveAccount(Account account);
+
     void updateAccount(Account account);
 
 }
