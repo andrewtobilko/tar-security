@@ -2,12 +2,15 @@ package com.tobilko.data.storage;
 
 import com.tobilko.data.account.Account;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
  * Created by Andrew Tobilko on 9/8/17.
  */
 public interface AccountStorage {
+
+    List<Account> getAll();
 
     Optional<Account> getAccountByName(String name);
 

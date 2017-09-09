@@ -21,6 +21,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.File;
 import java.util.Optional;
@@ -39,21 +40,26 @@ public class AuthorisationController implements Controller {
     private final Injector injector;
     private final AccountStorage accountStorage;
     private final PrincipalStorage principalStorage;
+    private final PasswordEncoder passwordEncoder;
 
-    private @FXML TextField nameField;
-    private @FXML TextField passwordField;
+    private @FXML
+    TextField nameField;
+    private @FXML
+    TextField passwordField;
 
     @Inject
     public AuthorisationController(
             EventBus eventBus,
             Injector injector,
             AccountStorage accountStorage,
-            PrincipalStorage principalStorage
+            PrincipalStorage principalStorage,
+            PasswordEncoder passwordEncoder
     ) {
         this.eventBus = eventBus;
         this.injector = injector;
         this.accountStorage = accountStorage;
         this.principalStorage = principalStorage;
+        this.passwordEncoder = passwordEncoder;
 
         eventBus.register(this);
     }
@@ -101,8 +107,14 @@ public class AuthorisationController implements Controller {
         Optional<Account> optionalAccount = accountStorage.getAccountByName(name);
         Account account;
 
-        if (optionalAccount.isPresent() && (account = optionalAccount.get()).getPassword().equals(password)) {
+        if (optionalAccount.isPresent() && passwordEncoder.matches(password, (account = optionalAccount.get()).getPassword())) {
             // handle successful validation
+
+            if (account.isBlocked()) {
+                new Alert(Alert.AlertType.ERROR, "That account is currently blocked...").show();
+
+                return;
+            }
 
             principalStorage.putPrincipalIntoStorage(account);
             closeAuthorisationWindow(event);

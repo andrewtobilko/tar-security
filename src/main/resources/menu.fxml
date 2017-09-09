@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
           fx:controller="com.tobilko.controller.MenuController">
@@ -12,12 +12,15 @@
     <rowConstraints>
         <RowConstraints percentHeight="100"/>
     </rowConstraints>
-    <MenuBar disable="true">
-        <Menu mnemonicParsing="false" text="Accounts">
-            <MenuItem text="Create an account"/>
-            <MenuItem text="Remove the account"/>
-            <MenuItem text="Edit the account"/>
-            <MenuItem text="Exit"/>
+    <MenuBar disable="true" fx:id="menuBar">
+        <Menu mnemonicParsing="false" text="Accounts" fx:id="actions">
+            <MenuItem onAction="#handleMenuItemSelected" fx:id="createAccount" text="Create an account"/>
+            <MenuItem onAction="#handleMenuItemSelected" fx:id="removeAccount" text="Remove the account"/>
+            <MenuItem onAction="#handleMenuItemSelected" fx:id="editAccount" text="Edit the account"/>
+            <MenuItem onAction="#handleMenuItemSelected" fx:id="editSelectedAccount" text="Edit the selected account"/>
+            <MenuItem onAction="#handleMenuItemSelected" fx:id="blockAllAccounts" text="Block the accounts"/>
+            <MenuItem onAction="#handleMenuItemSelected" fx:id="unblockAllAccounts" text="Unblock the accounts"/>
+            <MenuItem onAction="#handleMenuItemSelected" fx:id="exit" text="Exit"/>
         </Menu>
         <Menu text="Information">
             <MenuItem text="About" id="#informationMenuItem" onAction="#handleDeveloperInformationButtonClick"/>

@@ -1,8 +1,13 @@
 package com.tobilko.data.storage;
 
+import com.google.common.eventbus.EventBus;
+import com.google.inject.Inject;
+import com.tobilko.configuration.event.Event;
+import com.tobilko.configuration.event.EventType;
 import com.tobilko.data.account.Account;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +21,10 @@ public final class SimpleAccountStorageProvider implements AccountStorage {
 
     private final List<Account> accounts;
 
+    @Setter
+    @Inject
+    private EventBus eventBus;
+
     public static AccountStorage getAccountStorageWithInitialState(List<Account> state) {
         return new SimpleAccountStorageProvider(new ArrayList<>(state));
     }
@@ -28,6 +37,7 @@ public final class SimpleAccountStorageProvider implements AccountStorage {
     @Override
     public void removeAccount(Account account) {
         accounts.remove(account);
+        eventBus.post(new Event(EventType.ACCOUNT_LIST_CHANGED, account));
     }
 
     @Override
@@ -41,9 +51,13 @@ public final class SimpleAccountStorageProvider implements AccountStorage {
                 .ifPresent(a -> fillUpAccountWithAnotherAccount(a, account));
     }
 
+    @Override
+    public List<Account> getAll() {
+        return new ArrayList<>(accounts);
+    }
+
     private void fillUpAccountWithAnotherAccount(Account account, Account anotherAccount) {
         account.setPassword(anotherAccount.getPassword());
-        // todo
     }
 
 }

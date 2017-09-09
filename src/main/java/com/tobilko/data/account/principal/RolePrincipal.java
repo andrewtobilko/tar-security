@@ -11,4 +11,10 @@ public interface RolePrincipal extends Principal {
 
     Role getRole();
 
+    void setPassword(String value);
+    String getPassword();
+
+    boolean isBlocked();
+    void setBlockedStatus(boolean value);
+
 }

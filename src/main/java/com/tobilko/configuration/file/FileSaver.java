@@ -11,9 +11,11 @@ import java.nio.file.Paths;
  */
 public final class FileSaver {
 
+    private static final String PATH_TO_FILE_TO_SAVE_IN = "account.txt";
+
     public static boolean saveAccountDetailsToFile(Account account) {
         try {
-            Files.write(Paths.get("account.txt"), account.toFineString().getBytes());
+            Files.write(Paths.get(PATH_TO_FILE_TO_SAVE_IN), account.toFineString().getBytes());
         } catch (IOException e) {
             return false;
         }

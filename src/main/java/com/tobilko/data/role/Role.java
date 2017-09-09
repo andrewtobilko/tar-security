@@ -5,14 +5,17 @@ import com.tobilko.data.action.Action;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Optional;
+
+import static com.tobilko.data.action.Action.*;
 
 /**
  * Created by Andrew Tobilko on 9/8/17.
  */
 public enum Role {
 
-    ADMIN(ImmutableList.of()),
-    ORDINARY_USER(ImmutableList.of());
+    ADMIN_ACCOUNT(ImmutableList.of(CREATE_ACCOUNT, REMOVE_SELECTED_ACCOUNT, EDIT_CURRENT_ACCOUNT, EDIT_SELECTED_ACCOUNT, BLOCK_ALL_ACCOUNTS, UNBLOCK_ALL_ACCOUNTS, EXIT)),
+    ORDINARY_ACCOUNT(ImmutableList.of(EDIT_CURRENT_ACCOUNT, EXIT));
 
     @Getter
     private List<Action> abilities;
@@ -21,8 +24,7 @@ public enum Role {
         abilities = actions;
     }
 
-    public boolean canPerformAction(Action action) {
-        return abilities.stream().anyMatch(a -> a.equals(action));
+    public Optional<Action> getAbilityById(String id) {
+        return this.abilities.stream().filter(ability -> ability.getTabId().equals(id)).findAny();
     }
-
 }
