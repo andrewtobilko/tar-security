@@ -38,6 +38,7 @@ public final class ApplicationModule extends AbstractModule {
         bind(MenuController.class).asEagerSingleton();
         bind(ApplicationController.class).asEagerSingleton();
         bind(AuthorisationController.class).asEagerSingleton();
+        bind(AccountListController.class).asEagerSingleton();
 
         bind(AccountStorage.class).toInstance(getAccountStorage());
         bind(EventBus.class).toInstance(new EventBus());
@@ -45,6 +46,7 @@ public final class ApplicationModule extends AbstractModule {
         bind(PrincipalStorage.class).to(PrincipalStorageProvider.class).asEagerSingleton();
     }
 
+    // todo : remove
     private void configureMultiBinder() {
         Multibinder<Controller> controllerBinder =
                 Multibinder.newSetBinder(binder(), Controller.class);

@@ -5,6 +5,7 @@ package com.tobilko.configuration.event;
  */
 public enum EventType {
 
-    PRINCIPAL_CHANGED;
+    PRINCIPAL_CHANGED,
+    SELECTED_ACCOUNT_CHANGED;
 
 }
