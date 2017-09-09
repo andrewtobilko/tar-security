@@ -2,8 +2,16 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.GridPane?>
-<GridPane prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
           fx:controller="com.tobilko.controller.MenuController">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="100"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="100"/>
+    </rowConstraints>
     <MenuBar disable="true">
         <Menu mnemonicParsing="false" text="Accounts">
             <MenuItem text="Create an account"/>

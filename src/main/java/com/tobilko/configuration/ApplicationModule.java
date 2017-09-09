@@ -36,7 +36,12 @@ public final class ApplicationModule extends AbstractModule {
 
     private void configureBinder() {
         bind(MenuController.class).asEagerSingleton();
+        bind(ApplicationController.class).asEagerSingleton();
+        bind(AuthorisationController.class).asEagerSingleton();
+
         bind(AccountStorage.class).toInstance(getAccountStorage());
+        bind(EventBus.class).toInstance(new EventBus());
+
         bind(PrincipalStorage.class).to(PrincipalStorageProvider.class).asEagerSingleton();
     }
 

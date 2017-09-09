@@ -15,7 +15,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
@@ -23,7 +25,7 @@ import lombok.SneakyThrows;
 import java.io.File;
 import java.util.Optional;
 
-import static com.tobilko.configuration.alert.AlertUtils.showAlertWithTypeAndMessage;
+import static com.tobilko.configuration.file.FileSaver.saveAccountDetailsToFile;
 import static javafx.scene.control.Alert.AlertType.ERROR;
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
 
@@ -89,6 +91,8 @@ public class AuthorisationController implements Controller {
         eventBus.post(new Event(EventType.PRINCIPAL_CHANGED, null));
     }
 
+
+    // todo : rewrite
     @FXML
     public void validateCredentials(ActionEvent event) {
         String name = nameField.getText();
@@ -104,11 +108,25 @@ public class AuthorisationController implements Controller {
             closeAuthorisationWindow(event);
             eventBus.post(new Event(EventType.PRINCIPAL_CHANGED, account));
 
-            showAlertWithTypeAndMessage(INFORMATION, "You have successfully logged in!");
+            final ButtonType saveToFileButton = new ButtonType("Save to a file");
+
+            new Alert(
+                    INFORMATION,
+                    "You have successfully logged in!\n\nDetailed account information:\n\n" + account.toFineString(),
+                    saveToFileButton, ButtonType.OK
+            ).showAndWait().ifPresent(button -> {
+                if (button.equals(saveToFileButton)) {
+                    if (saveAccountDetailsToFile(account)) {
+                        new Alert(INFORMATION, "We have saved the current account information into the file!").show();
+                    } else {
+                        new Alert(ERROR, "An I/O error occurred...").show();
+                    }
+                }
+            });
         } else {
             // handle failed validation
 
-            showAlertWithTypeAndMessage(ERROR, "You have entered an incorrect credentials!");
+            new Alert(ERROR, "You have entered an incorrect credentials!").show();
         }
     }
 
@@ -124,11 +142,15 @@ public class AuthorisationController implements Controller {
 
     @Subscribe
     public void handleIncomingEvent(Event event) {
+
         if (event.getType().equals(EventType.PRINCIPAL_CHANGED)) {
+
             boolean isPrincipalPresent = principalStorage.getPrincipal().isPresent();
             logOutButton.setDisable(!isPrincipalPresent);
             logInButton.setDisable(isPrincipalPresent);
+
         }
+
     }
 
 }

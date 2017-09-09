@@ -34,4 +34,10 @@ public final class Account implements RolePrincipal {
         return "[name=" + name + ",role=" + role + "]";
     }
 
+    public String toFineString() {
+        return "Name: " + (name == null ? "Unknown" : name) +
+                "\nRole: " + role.name() +
+                "\nAbilities: " + role.getAbilities();
+    }
+
 }
