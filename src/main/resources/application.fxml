@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-          prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.tobilko.controller.ApplicationController">
+          prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+          fx:controller="com.tobilko.controller.ApplicationController" fx:id="applicationGridPane">
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
@@ -16,14 +17,16 @@
         <RowConstraints percentHeight="10"/>
         <RowConstraints percentHeight="10"/>
         <RowConstraints percentHeight="60"/>
-        <RowConstraints percentHeight="20" />
+        <RowConstraints percentHeight="20"/>
     </rowConstraints>
-    <VBox fx:id="currentAccountInformation" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" visible="false">
-        <Label>You are currently logged in as </Label>
-        <Label fx:id="currentAccountNameLabel" />
+    <VBox fx:id="currentAccountInformation" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"
+          visible="false">
+        <Label>You are currently logged in as</Label>
+        <Label fx:id="currentAccountNameLabel"/>
     </VBox>
 
     <fx:include GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2" source="menu.fxml"/>
     <fx:include GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" source="account-list.fxml"/>
-    <fx:include GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2" source="authorisation-buttons.fxml"/>
+    <fx:include GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2"
+                source="authorisation-buttons.fxml"/>
 </GridPane>

@@ -15,6 +15,6 @@ public interface RolePrincipal extends Principal {
     String getPassword();
 
     boolean isBlocked();
-    void setBlockedStatus(boolean value);
+    void setBlocked(boolean value);
 
 }

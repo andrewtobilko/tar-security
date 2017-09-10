@@ -21,21 +21,11 @@ public final class Account implements RolePrincipal {
     private @NonNull String name;
     private @NonNull String password;
     private @NonNull Role role;
-    private boolean blocked;
+    private @NonNull boolean blocked;
 
     public boolean equals(Object that) {
         return this == that ||
                 that instanceof Account && ((Account) that).getName().equals(getName());
-    }
-
-    @Override
-    public boolean isBlocked() {
-        return blocked;
-    }
-
-    @Override
-    public void setBlockedStatus(boolean value) {
-        blocked = value;
     }
 
     @Override

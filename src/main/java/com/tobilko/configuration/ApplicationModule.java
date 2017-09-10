@@ -5,7 +5,6 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import com.tobilko.controller.AccountListController;
 import com.tobilko.controller.ApplicationController;
 import com.tobilko.controller.AuthorisationController;
@@ -17,11 +16,12 @@ import com.tobilko.data.role.Role;
 import com.tobilko.data.storage.AccountStorage;
 import com.tobilko.data.storage.SimpleAccountStorageProvider;
 import javafx.fxml.FXMLLoader;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+
+import static com.tobilko.data.role.Role.*;
 
 /**
  * Created by Andrew Tobilko on 9/8/17.
@@ -61,9 +61,9 @@ public final class ApplicationModule extends AbstractModule {
 
         private List<Account> getInitialAccounts(PasswordEncoder encoder) {
             return ImmutableList.of(
-                    new Account("Andrew", encoder.encode("000"), Role.ADMIN_ACCOUNT),
-                    new Account("Ann", encoder.encode("111"), Role.ORDINARY_ACCOUNT),
-                    new Account("Mike", encoder.encode("222"), Role.ORDINARY_ACCOUNT)
+                    new Account("Andrew", encoder.encode("000"), ADMIN_ACCOUNT, false),
+                    new Account("Ann", encoder.encode("111"), ORDINARY_ACCOUNT, false),
+                    new Account("Mike", encoder.encode("222"), ORDINARY_ACCOUNT, false)
             );
         }
 

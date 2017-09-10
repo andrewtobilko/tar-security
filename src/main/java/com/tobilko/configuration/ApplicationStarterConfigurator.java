@@ -1,7 +1,6 @@
 package com.tobilko.configuration;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

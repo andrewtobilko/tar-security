@@ -16,12 +16,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -101,7 +106,7 @@ public final class MenuController extends Controller {
         principalStorage.getPrincipal()
                 .ifPresent(principal ->
                         principal.getRole().getAbilityById(item.getId())
-                                .ifPresent(ability -> ability.performAction(injector, menuBar)));
+                                .ifPresent(ability -> ability.performAction(injector)));
     }
 
 }

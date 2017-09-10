@@ -1,7 +1,6 @@
 package com.tobilko;
 
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.tobilko.configuration.ApplicationModule;
 import com.tobilko.configuration.ApplicationStarterConfigurator;
@@ -17,7 +16,9 @@ public final class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws Exception {
         Injector injector = createApplicationInjector();
-        new ApplicationStarterConfigurator(injector.getInstance(FXMLLoader.class)).configureApplicationWithPrimaryStage(stage);
+
+        new ApplicationStarterConfigurator(injector.getInstance(FXMLLoader.class))
+                .configureApplicationWithPrimaryStage(stage);
 
         stage.show();
     }

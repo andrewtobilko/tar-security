@@ -10,7 +10,9 @@ import com.tobilko.data.account.principal.RolePrincipal;
 import com.tobilko.data.account.principal.storage.PrincipalStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 
 import java.util.Optional;
 
@@ -21,6 +23,10 @@ import java.util.Optional;
 public final class ApplicationController extends Controller {
 
     private final PrincipalStorage principalStorage;
+
+    @FXML
+    @Getter
+    private GridPane applicationGridPane;
 
     private @FXML Label currentAccountNameLabel;
     private @FXML VBox currentAccountInformation;
