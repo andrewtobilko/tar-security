@@ -5,7 +5,6 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.tobilko.configuration.event.Event;
-import com.tobilko.configuration.event.EventType;
 import com.tobilko.data.account.Account;
 import com.tobilko.data.account.principal.RolePrincipal;
 import com.tobilko.data.account.principal.storage.PrincipalStorage;
@@ -14,35 +13,29 @@ import com.tobilko.data.storage.AccountStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import lombok.Getter;
 
-import java.util.HashSet;
 import java.util.Optional;
 
-import static com.tobilko.configuration.event.EventType.NEW_ACCOUNT_CREATED;
+import static com.tobilko.configuration.event.EventType.SELECTED_ACCOUNT_CHANGED;
 
 /**
  * Created by Andrew Tobilko on 9/9/17.
  */
 @Singleton
-public final class AccountListController {
+public final class AccountListController extends Controller {
 
-    private final EventBus eventBus;
     private final PrincipalStorage principalStorage;
     private final AccountStorage accountStorage;
 
-    @Getter
-    private Account currentAccount;
+    private @Getter Account currentAccount;
+    private @FXML ListView<Account> accountListView;
 
     @Inject
-    public AccountListController(
-            EventBus eventBus,
-            PrincipalStorage principalStorage,
-            AccountStorage accountStorage
-    ) {
-        this.eventBus = eventBus;
+    public AccountListController(EventBus eventBus, PrincipalStorage principalStorage, AccountStorage accountStorage) {
+        super(eventBus);
+
         this.principalStorage = principalStorage;
         this.accountStorage = accountStorage;
 
@@ -50,65 +43,92 @@ public final class AccountListController {
     }
 
     @FXML
-    private ListView<Label> accountListView;
-
-    @FXML
     public void handleSelectAction(javafx.event.Event event) {
-        eventBus.post(new Event(
-                EventType.SELECTED_ACCOUNT_CHANGED,
-                accountListView.getSelectionModel().getSelectedItem().getText())
-        );
+        getEventBus().post(new Event(
+                SELECTED_ACCOUNT_CHANGED,
+                accountListView.getSelectionModel().getSelectedItem()
+        ));
     }
 
     @Subscribe
-    public void handlePrincipalChangedAction(Event event) { // todo : event type
+    public void handleEvent(Event event) {
 
-        EventType type = event.getType();
+        switch (event.getType()) {
 
-        if (type.equals(EventType.PRINCIPAL_CHANGED)) {
+            case PRINCIPAL_CHANGED:
+                handlePrincipalChangedEvent(event);
+                break;
 
-            Optional<RolePrincipal> optionalPrincipal = principalStorage.getPrincipal();
+            case SELECTED_ACCOUNT_CHANGED:
+                handleSelectedAccountChanged(event);
+                break;
 
-            if (optionalPrincipal.isPresent() && optionalPrincipal.get().getRole().equals(Role.ADMIN_ACCOUNT)) {
-                accountListView.setVisible(true);
-                ObservableList<Label> labels = FXCollections.observableArrayList();
+            case NEW_ACCOUNT_CREATED:
+                handleNewAccountCreated(event);
+                break;
 
+            case ACCOUNT_LIST_CHANGED:
+                handleAccountListChanged(event);
+                break;
 
-                for (Account account : accountStorage.getAll()) {
-                    if (!optionalPrincipal.get().getName().equals(account.getName())) {
-                        labels.add(new Label(account.getName() + ", " + account.getRole().name()));
-                    }
-                }
-                accountListView.setItems(labels);
-            } else {
-                accountListView.setVisible(false);
-            }
-            // todo
-        } else if (type.equals(EventType.SELECTED_ACCOUNT_CHANGED)) {
-            accountStorage.getAccountByName(event.getPayload().toString().split(",")[0]).ifPresent(account -> {
-                System.out.println("acccount = " + account);
-                this.currentAccount = account;
-            });
-        } else if (type.equals(NEW_ACCOUNT_CREATED)) {
-            Account payload = (Account) event.getPayload();
-
-
-            accountStorage.saveAccount(payload);
-
-            HashSet<Label> labels = new HashSet<>(accountListView.getItems());
-            labels.add(new Label(payload.getName() + ", " + payload.getRole()) );
-
-            accountListView.setItems(convertSetToObservableList(labels));
-        } else if (type.equals(EventType.ACCOUNT_LIST_CHANGED)) {
-            Account payload = (Account) event.getPayload();
-
-            accountListView.getItems().removeIf(l -> l.getText().equals(payload.getName() + ", " + payload.getRole()));
+            default:
+                // skip other types
         }
 
     }
 
-    private ObservableList<Label> convertSetToObservableList(HashSet<Label> labels) {
-        return FXCollections.observableArrayList(labels);
+    private void handlePrincipalChangedEvent(Event event) {
+        final Optional<RolePrincipal> optionalPrincipal = principalStorage.getPrincipal();
+
+        if (!optionalPrincipal.isPresent()) {
+            throw new IllegalArgumentException("Principal has not actually been changed...");
+        }
+
+        final RolePrincipal principal = optionalPrincipal.get();
+        final boolean isPrincipalAdmin = principal.getRole().equals(Role.ADMIN_ACCOUNT);
+
+        accountListView.setVisible(isPrincipalAdmin);
+
+        if (isPrincipalAdmin) {
+            fillUpAccountListViewExcludingPrincipal(principal);
+        }
+    }
+
+    private void fillUpAccountListViewExcludingPrincipal(RolePrincipal principal) {
+        final ObservableList<Account> list = FXCollections.observableArrayList();
+
+        for (Account account : accountStorage.getAll()) {
+            if (!principal.getName().equals(account.getName())) {
+                list.add(account);
+            }
+        }
+
+        accountListView.setItems(list);
+    }
+
+    private void handleSelectedAccountChanged(Event event) {
+        accountStorage.getAccountByName(((Account) event.getPayload()).getName()).ifPresent(account -> {
+            this.currentAccount = account;
+        });
+    }
+
+    private void handleNewAccountCreated(Event event) {
+        final Account payload = (Account) event.getPayload();
+
+        accountStorage.saveAccount(payload);
+        accountListView.getItems().add(payload);
+    }
+
+    private void handleAccountListChanged(Event event) {
+        Account payload = (Account) event.getPayload();
+
+        // can't handle this case
+        if (!(event.getPayload() instanceof Account)) {
+            return;
+        }
+
+        String payloadAccountName = ((Account) event.getPayload()).getName();
+        accountListView.getItems().removeIf(account -> account.getName().equals(payloadAccountName));
     }
 
 }
