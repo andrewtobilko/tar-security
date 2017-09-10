@@ -18,43 +18,42 @@ import java.util.Optional;
  * Created by Andrew Tobilko on 9/9/17.
  */
 @Singleton
-public final class ApplicationController implements Controller {
+public final class ApplicationController extends Controller {
 
-    private final EventBus eventBus;
     private final PrincipalStorage principalStorage;
 
-    @FXML
-    private Label currentAccountNameLabel;
-    @FXML
-    private VBox currentAccountInformation;
+    private @FXML Label currentAccountNameLabel;
+    private @FXML VBox currentAccountInformation;
 
     @Inject
     public ApplicationController(
             EventBus eventBus,
             PrincipalStorage principalStorage
     ) {
-        this.eventBus = eventBus;
+        super(eventBus);
         this.principalStorage = principalStorage;
 
         eventBus.register(this);
     }
 
     @Subscribe
-    public void handleIncomingEvent(Event event) {
-        if (event.getType().equals(EventType.PRINCIPAL_CHANGED)) {
-
-            Optional<RolePrincipal> optionalPrincipal = principalStorage.getPrincipal();
-
-            if (optionalPrincipal.isPresent()) {
-                currentAccountInformation.setVisible(true);
-
-                RolePrincipal principal = optionalPrincipal.get();
-                currentAccountNameLabel.setText(principal.getName() + ", " + principal.getRole().name());
-            } else {
-                currentAccountInformation.setVisible(false);
-
-            }
+    public void handleEvent(Event event) {
+        if (!event.getType().equals(EventType.PRINCIPAL_CHANGED)) {
+            return;
         }
+
+        final Optional<RolePrincipal> optionalPrincipal = principalStorage.getPrincipal();
+        final boolean isPrincipalPresent = optionalPrincipal.isPresent();
+
+        currentAccountInformation.setVisible(isPrincipalPresent);
+
+        if (isPrincipalPresent) {
+            currentAccountNameLabel.setText(generateAccountTitleByPrincipal(optionalPrincipal.get()));
+        }
+    }
+
+    private  String generateAccountTitleByPrincipal(RolePrincipal principal) {
+        return principal.getName() + ", " + principal.getRole().name();
     }
 
 }
