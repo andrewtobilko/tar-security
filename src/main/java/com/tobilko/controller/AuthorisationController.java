@@ -3,7 +3,6 @@ package com.tobilko.controller;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.tobilko.configuration.event.Event;
 import com.tobilko.data.account.Account;
@@ -37,18 +36,17 @@ import static javafx.scene.control.Alert.AlertType.INFORMATION;
 @Singleton
 public class AuthorisationController extends Controller {
 
-    private final Injector injector;
+    private @FXML Button logOutButton;
+    private @FXML Button logInButton;
+
+    private final FXMLLoader loader;
     private final PrincipalStorage principalStorage;
 
     @Inject
-    public AuthorisationController(
-            EventBus eventBus,
-            Injector injector,
-            PrincipalStorage principalStorage
-    ) {
+    public AuthorisationController(EventBus eventBus, FXMLLoader loader, PrincipalStorage principalStorage) {
         super(eventBus);
 
-        this.injector = injector;
+        this.loader = loader;
         this.principalStorage = principalStorage;
 
         eventBus.register(this);
@@ -56,22 +54,14 @@ public class AuthorisationController extends Controller {
 
     @FXML
     public void handleLogInAction(ActionEvent event) {
-        FXMLLoader loader = configureLogInWindowLoader();
-        renderLogInWindowWithFXMLLoader(loader);
+        renderLogInWindow();
     }
 
         @SneakyThrows
-        private FXMLLoader configureLogInWindowLoader() {
-            // todo : get configured loader
-            FXMLLoader loader = new FXMLLoader(new File(PATH_TO_SCHEMA).toURI().toURL());
-            loader.setControllerFactory(injector::getInstance);
-
-            return loader;
-        }
-
-        @SneakyThrows
-        private void renderLogInWindowWithFXMLLoader(FXMLLoader loader) {
+        private void renderLogInWindow() {
             Stage stage = new Stage();
+
+            loader.setLocation(new File(PATH_TO_SCHEMA).toURI().toURL());
 
             stage.setTitle(TITLE);
             stage.setScene(new Scene(loader.load(), WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -83,9 +73,6 @@ public class AuthorisationController extends Controller {
         principalStorage.clearStorage();
         eventBus.post(new Event(PRINCIPAL_CHANGED, null));
     }
-
-    private @FXML Button logOutButton;
-    private @FXML Button logInButton;
 
     @Subscribe
     public void handleEvent(Event event) {
@@ -106,7 +93,6 @@ public class AuthorisationController extends Controller {
 
         private @FXML TextField nameField;
         private @FXML TextField passwordField;
-
 
         private final AccountStorage accountStorage;
         private final PrincipalStorage principalStorage;

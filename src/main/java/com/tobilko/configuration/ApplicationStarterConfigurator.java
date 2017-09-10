@@ -23,11 +23,7 @@ public final class ApplicationStarterConfigurator {
 
     @SneakyThrows
     public void configureApplicationWithPrimaryStage(Stage stage) {
-
-        //FXMLLoader loader = new FXMLLoader(new File(PATH_TO_SCHEMA).toURI().toURL());
         loader.setLocation(new File(PATH_TO_SCHEMA).toURI().toURL());
-//        Injector injector = Guice.createInjector(new ApplicationModule());
-//        loader.setControllerFactory(injector::getInstance);
 
         stage.setScene(new Scene(loader.load(), WINDOW_WIDTH, WINDOW_HEIGHT));
         stage.setTitle(TITLE);

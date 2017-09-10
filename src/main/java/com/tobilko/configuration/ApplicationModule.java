@@ -3,6 +3,9 @@ package com.tobilko.configuration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.tobilko.controller.AccountListController;
 import com.tobilko.controller.ApplicationController;
 import com.tobilko.controller.AuthorisationController;
@@ -13,6 +16,8 @@ import com.tobilko.data.account.principal.storage.PrincipalStorageProvider;
 import com.tobilko.data.role.Role;
 import com.tobilko.data.storage.AccountStorage;
 import com.tobilko.data.storage.SimpleAccountStorageProvider;
+import javafx.fxml.FXMLLoader;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,32 +28,43 @@ import java.util.List;
  */
 public final class ApplicationModule extends AbstractModule {
 
-    private PasswordEncoder encoder = new BCryptPasswordEncoder();
-
     @Override
     protected void configure() {
+        // controllers
         bind(MenuController.class).asEagerSingleton();
         bind(ApplicationController.class).asEagerSingleton();
         bind(AuthorisationController.class).asEagerSingleton();
         bind(AccountListController.class).asEagerSingleton();
 
-        bind(AccountStorage.class).toInstance(getAccountStorage());
+        // EventBus
         bind(EventBus.class).toInstance(new EventBus());
+
+        // PasswordEncoder dependencies
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         bind(PasswordEncoder.class).toInstance(encoder);
+        bind(AccountStorage.class).toInstance(getAccountStorage(encoder));
 
         bind(PrincipalStorage.class).to(PrincipalStorageProvider.class).asEagerSingleton();
     }
 
-    private AccountStorage getAccountStorage() {
-        return SimpleAccountStorageProvider.getAccountStorageWithInitialState(getInitialAccounts());
+    @Provides
+    public FXMLLoader getConfiguredFXMLLoader(Injector injector) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setControllerFactory(injector::getInstance);
+
+        return loader;
     }
 
-    private List<Account> getInitialAccounts() {
-        return ImmutableList.of(
-                new Account("Andrew", encoder.encode("000"), Role.ADMIN_ACCOUNT),
-                new Account("Ann", encoder.encode("111"), Role.ORDINARY_ACCOUNT),
-                new Account("Mike", encoder.encode("222"), Role.ORDINARY_ACCOUNT)
-        );
-    }
+        private AccountStorage getAccountStorage(PasswordEncoder encoder) {
+            return SimpleAccountStorageProvider.getAccountStorageWithInitialState(getInitialAccounts(encoder));
+        }
+
+        private List<Account> getInitialAccounts(PasswordEncoder encoder) {
+            return ImmutableList.of(
+                    new Account("Andrew", encoder.encode("000"), Role.ADMIN_ACCOUNT),
+                    new Account("Ann", encoder.encode("111"), Role.ORDINARY_ACCOUNT),
+                    new Account("Mike", encoder.encode("222"), Role.ORDINARY_ACCOUNT)
+            );
+        }
 
 }

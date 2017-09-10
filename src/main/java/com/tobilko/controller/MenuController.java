@@ -80,15 +80,13 @@ public final class MenuController extends Controller {
             final Role role = principal.getRole();
 
             final Set<String> availableOptions = role.getAbilities().stream().map(Action::getTabId).collect(toSet());
+            final String ACTIONS_SUBMENU_IDENTIFIER = "actions";
 
-            // todo
-            for (Menu menu : menuBar.getMenus()) {
-                if (menu.getId() != null && menu.getId().equals("actions")) {
-                    for (MenuItem menuItem : menu.getItems()) {
-                        menuItem.setVisible(availableOptions.contains(menuItem.getId()));
-                    }
-                }
-            }
+            menuBar.getMenus()
+                    .stream()
+                    .filter(menu -> menu.getId() != null && menu.getId().equals(ACTIONS_SUBMENU_IDENTIFIER))
+                    .flatMap(menu -> menu.getItems().stream())
+                    .forEach(item -> item.setVisible(availableOptions.contains(item.getId())));
         }
 
     public void handleMenuItemSelected(javafx.event.Event event) {
