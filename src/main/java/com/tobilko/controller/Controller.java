@@ -1,8 +1,6 @@
 package com.tobilko.controller;
 
 import com.google.common.eventbus.EventBus;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class Controller implements EventBusAware {
 
-    @Getter(AccessLevel.PROTECTED)
+    @Getter
     protected final EventBus eventBus;
 
 }

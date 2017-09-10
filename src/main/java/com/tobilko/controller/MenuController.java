@@ -5,6 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import com.tobilko.configuration.constant.DeveloperInformation;
 import com.tobilko.configuration.event.Event;
 import com.tobilko.configuration.event.EventType;
 import com.tobilko.data.account.principal.RolePrincipal;
@@ -21,20 +22,19 @@ import javafx.scene.control.MenuItem;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Created by Andrew Tobilko on 9/7/17.
  */
 @Singleton
-public final class MenuController implements Controller {
+public final class MenuController extends Controller {
 
-    private final EventBus eventBus;
     private final Injector injector;
     private final PrincipalStorage principalStorage;
 
-    @FXML
-    private MenuBar menuBar;
+    private @FXML MenuBar menuBar;
 
     @Inject
     public MenuController(
@@ -42,25 +42,20 @@ public final class MenuController implements Controller {
             PrincipalStorage principalStorage,
             Injector injector
     ) {
-        this.eventBus = eventBus;
+        super(eventBus);
+
         this.injector = injector;
         this.principalStorage = principalStorage;
 
         eventBus.register(this);
     }
 
+    @FXML
     public void handleDeveloperInformationButtonClick(ActionEvent event) {
         new Alert(
                 Alert.AlertType.INFORMATION,
                 DeveloperInformation.DEVELOPED_BY_TITLE
         ).show();
-
-    }
-
-    private class DeveloperInformation {
-
-        private static final String DEVELOPED_BY_TITLE = "Designed by Andrew Tobilko, 2017";
-
     }
 
     @Subscribe
@@ -68,51 +63,47 @@ public final class MenuController implements Controller {
 
         if (event.getType().equals(EventType.PRINCIPAL_CHANGED)) {
 
-            Optional<RolePrincipal> principal = principalStorage.getPrincipal();
+            final Optional<RolePrincipal> principal = principalStorage.getPrincipal();
+            final boolean isPrincipalPresent = principal.isPresent();
 
-            if (principal.isPresent()) {
+            menuBar.setDisable(!isPrincipalPresent);
 
-                menuBar.setDisable(false);
+            if (isPrincipalPresent) {
                 adaptMenuItemsForPrincipal(principal.get());
-
-            } else {
-                menuBar.setDisable(true);
             }
 
         }
 
     }
 
-    private void adaptMenuItemsForPrincipal(RolePrincipal principal) {
-        Role role = principal.getRole();
+        private void adaptMenuItemsForPrincipal(RolePrincipal principal) {
+            final Role role = principal.getRole();
 
-        Set<String> availableOptions = role.getAbilities().stream().map(Action::getTabId).collect(Collectors.toSet());
+            final Set<String> availableOptions = role.getAbilities().stream().map(Action::getTabId).collect(toSet());
 
-        for (Menu menu : menuBar.getMenus()) {
-            if (menu.getId() != null && menu.getId().equals("actions")) {
-                for (MenuItem menuItem : menu.getItems()) {
-                    menuItem.setVisible(availableOptions.contains(menuItem.getId()));
+            // todo
+            for (Menu menu : menuBar.getMenus()) {
+                if (menu.getId() != null && menu.getId().equals("actions")) {
+                    for (MenuItem menuItem : menu.getItems()) {
+                        menuItem.setVisible(availableOptions.contains(menuItem.getId()));
+                    }
                 }
             }
         }
-    }
 
     public void handleMenuItemSelected(javafx.event.Event event) {
         EventTarget target = event.getTarget();
 
-
-        if (target instanceof MenuItem) {
-            MenuItem item = (MenuItem)target;
-
-            principalStorage.getPrincipal().ifPresent(principal -> {
-
-                principal.getRole().getAbilityById(item.getId()).ifPresent(ability -> {
-
-                    ability.performAction(injector, menuBar);
-
-                });
-            });
+        if (!(target instanceof MenuItem)) {
+            return;
         }
+
+        final MenuItem item = (MenuItem) target;
+
+        principalStorage.getPrincipal()
+                .ifPresent(principal ->
+                        principal.getRole().getAbilityById(item.getId())
+                                .ifPresent(ability -> ability.performAction(injector, menuBar)));
     }
 
 }
