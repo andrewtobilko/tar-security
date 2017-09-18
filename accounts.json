@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Andrew",
+    "password": "$2a$10$nM3MVxpR3RMcyAvSyVA5KOa0zkDNZNFwNPHoB3zEXL2VnC.VaW1ai",
+    "role": "ADMIN_ACCOUNT",
+    "blocked": false
+  },
+  {
+    "name": "Ann",
+    "password": "$2a$10$WGsXI9iLC7uPHb9xZAatkuHF9Z5BVwDiSOJQ8Gbm0cM1NCHtlj4X6",
+    "role": "ORDINARY_ACCOUNT",
+    "blocked": false
+  }
+]

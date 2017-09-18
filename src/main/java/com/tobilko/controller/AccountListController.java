@@ -109,9 +109,13 @@ public final class AccountListController extends Controller {
     }
 
     private void handleSelectedAccountChanged(Event event) {
-        accountStorage.getAccountByName(((Account) event.getPayload()).getName()).ifPresent(account -> {
-            this.currentAccount = account;
-        });
+        Object payload = event.getPayload();
+
+        if (payload instanceof Account) {
+            accountStorage.getAccountByName(((Account) payload).getName()).ifPresent(account -> {
+                this.currentAccount = account;
+            });
+        }
     }
 
     private void handleNewAccountCreated(Event event) {

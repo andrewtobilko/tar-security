@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
-          fx:controller="com.tobilko.controller.AuthorisationController$AuthorisationWindowController">
+          fx:controller="com.tobilko.controller.AuthorisationWindowController">
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>

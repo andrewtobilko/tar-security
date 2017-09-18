@@ -13,7 +13,6 @@ import com.tobilko.data.role.Role;
 import com.tobilko.data.storage.AccountStorage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -76,20 +75,22 @@ public final class InjectorConsumer {
         Account selectedAccount = injector.getInstance(AccountListController.class).getCurrentAccount();
 
         if (selectedAccount == null) {
-            new Alert(Alert.AlertType.ERROR, "You haven't picked up any account...");
+            new Alert(Alert.AlertType.ERROR, "You haven't picked up any account...").show();
             return;
         }
+
+        changePasswordForAccount(injector, selectedAccount);
+    }
+
+    private static void changePasswordForAccount(Injector injector, Account account) {
 
         final TextInputDialog passwordDialog = new TextInputDialog();
         passwordDialog.setContentText("Enter a new password to change:");
 
-        passwordDialog.showAndWait().ifPresent(newPassword -> {
-            final PasswordEncoder encoder = injector.getInstance(PasswordEncoder.class);
-            selectedAccount.setPassword(encoder.encode(newPassword));
-        });
+        passwordDialog.showAndWait().ifPresent(account::setPassword);
 
         final AccountStorage storage = injector.getInstance(AccountStorage.class);
-        storage.updateAccount(selectedAccount);
+        storage.updateAccount(account);
     }
 
     public static void createAccount(Injector injector) {
@@ -106,10 +107,7 @@ public final class InjectorConsumer {
 
         // handle callbacks
         nameDialog.showAndWait().ifPresent(account::setName);
-        passwordDialog.showAndWait().ifPresent(value -> {
-            final PasswordEncoder encoder = injector.getInstance(PasswordEncoder.class);
-            account.setPassword(encoder.encode(value));
-        });
+        passwordDialog.showAndWait().ifPresent(account::setPassword);
 
         // notify about a new account created
         final EventBus eventBus = injector.getInstance(EventBus.class);
@@ -119,14 +117,23 @@ public final class InjectorConsumer {
     public static void removeSelectedAccount(Injector injector) {
         final AccountListController controller = injector.getInstance(AccountListController.class);
 
-        Account currentAccount = controller.getCurrentAccount();
+        Account selectedAccount = controller.getCurrentAccount();
+
+        if (selectedAccount == null) {
+            new Alert(Alert.AlertType.ERROR, "You haven't picked up any account...").show();
+            return;
+        }
 
         new Alert(Alert.AlertType.CONFIRMATION, "You wanna remove the account. Are you sure?")
                 .showAndWait()
                 .ifPresent(buttonType -> {
                             if (!buttonType.getButtonData().isCancelButton()) {
                                 final AccountStorage accountStorage = injector.getInstance(AccountStorage.class);
-                                accountStorage.removeAccount(currentAccount);
+                                accountStorage.removeAccount(selectedAccount);
+
+                                // notify about the account removed
+                                final EventBus eventBus = injector.getInstance(EventBus.class);
+                                eventBus.post(new Event(EventType.ACCOUNT_LIST_CHANGED, selectedAccount));
                             }
                         }
                 );
@@ -136,13 +143,9 @@ public final class InjectorConsumer {
         final PrincipalStorage instance = injector.getInstance(PrincipalStorage.class);
 
         instance.getPrincipal().ifPresent(principal -> {
-            TextInputDialog passwordDialog = new TextInputDialog();
-            passwordDialog.setContentText("Enter a new password to change:");
-
-            passwordDialog.showAndWait().ifPresent(value -> {
-                final PasswordEncoder encoder = injector.getInstance(PasswordEncoder.class);
-                principal.setPassword(encoder.encode(value));
-            });
+            if (principal instanceof Account) {
+                changePasswordForAccount(injector, (Account) principal);
+            }
         });
     }
 
