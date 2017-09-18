@@ -15,7 +15,7 @@
     <MenuBar disable="true" fx:id="menuBar">
         <Menu mnemonicParsing="false" text="Accounts" fx:id="actions">
             <MenuItem onAction="#handleMenuItemSelected" fx:id="createAccount" text="Create an account"/>
-            <MenuItem onAction="#handleMenuItemSelected" fx:id="removeAccount" text="Remove the account"/>
+            <MenuItem onAction="#handleMenuItemSelected" fx:id="removeAccount" text="Remove the selected account"/>
             <MenuItem onAction="#handleMenuItemSelected" fx:id="editAccount" text="Edit the account"/>
             <MenuItem onAction="#handleMenuItemSelected" fx:id="editSelectedAccount" text="Edit the selected account"/>
             <MenuItem onAction="#handleMenuItemSelected" fx:id="blockAllAccounts" text="Block the accounts"/>
