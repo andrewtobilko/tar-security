@@ -63,10 +63,17 @@ public class AuthorisationController extends Controller {
 
             loader.setLocation(new File(PATH_TO_SCHEMA).toURI().toURL());
 
+            cleanUPFXMLLoader(loader);
+
             stage.setTitle(TITLE);
             stage.setScene(new Scene(loader.load(), WINDOW_WIDTH, WINDOW_HEIGHT));
             stage.show();
         }
+
+            private void cleanUPFXMLLoader(FXMLLoader loader) {
+                loader.setController(null);
+                loader.setRoot(null);
+            }
 
     @FXML
     public void handleLogOutAction(ActionEvent event) {

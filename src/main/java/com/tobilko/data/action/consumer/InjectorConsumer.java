@@ -16,7 +16,6 @@ import javafx.scene.control.TextInputDialog;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Created by Andrew Tobilko on 9/10/17.
@@ -28,41 +27,36 @@ public final class InjectorConsumer {
                 .getPrincipal()
                 .orElseThrow(() -> new IllegalArgumentException("no principal"));
 
-        changeBlockingStatusForAllAccountsWithPredicate(
-                injector.getInstance(AccountStorage.class),
-                true,
-                account -> !account.getName().equals(principal.getName())
-        );
-    }
-
-    public static void unblockAllAccountsConsumer(Injector injector) {
-        changeBlockingStatusForAllAccountsWithPredicate(
-                injector.getInstance(AccountStorage.class),
-                false,
-                null
-        );
-    }
-
-    private static void changeBlockingStatusForAllAccountsWithPredicate(AccountStorage storage, boolean blockingStatus, Predicate<Account> predicate) {
-        List<Account> accounts = storage.getAll();
+        final AccountStorage storage = injector.getInstance(AccountStorage.class);
+        final List<Account> accounts = storage.getAll();
 
         if (accounts.isEmpty()) {
             return;
         }
 
-        // according to "Clean Code", I shouldn't have written this, but I have
-        if (predicate == null) {
-            for (Account account : accounts) {
-                account.setBlocked(blockingStatus);
-            }
-        } else {
-            for (Account account : accounts) {
-                if (predicate.test(account)) {
-                    account.setBlocked(blockingStatus);
-                }
+        for (Account account : accounts) {
+            if (!account.getName().equals(principal.getName())) {
+                account.setBlocked(true);
             }
         }
+        showBlockingStatusChangingAlert(true);
+    }
 
+    public static void unblockAllAccountsConsumer(Injector injector) {
+        final AccountStorage storage = injector.getInstance(AccountStorage.class);
+        final List<Account> accounts = storage.getAll();
+
+        if (accounts.isEmpty()) {
+            return;
+        }
+
+        for (Account account : accounts) {
+            account.setBlocked(false);
+        }
+        showBlockingStatusChangingAlert(false);
+    }
+
+    private static void showBlockingStatusChangingAlert(boolean blockingStatus) {
         new Alert(
                 Alert.AlertType.INFORMATION,
                 "All the accounts' blocking statuses have been set to " + blockingStatus + "!"

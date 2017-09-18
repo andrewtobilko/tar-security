@@ -81,7 +81,9 @@ public final class AccountListController extends Controller {
         final Optional<RolePrincipal> optionalPrincipal = principalStorage.getPrincipal();
 
         if (!optionalPrincipal.isPresent()) {
-            throw new IllegalArgumentException("Principal has not actually been changed...");
+            accountListView.setVisible(false);
+
+            return;
         }
 
         final RolePrincipal principal = optionalPrincipal.get();
