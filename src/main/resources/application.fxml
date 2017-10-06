@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
           prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
-          fx:controller="com.tobilko.controller.ApplicationController" fx:id="applicationGridPane">
+          fx:controller="com.tobilko.lab1.controller.ApplicationController" fx:id="applicationGridPane">
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>

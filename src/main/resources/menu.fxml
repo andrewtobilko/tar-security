@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
-          fx:controller="com.tobilko.controller.MenuController">
+          fx:controller="com.tobilko.lab1.controller.MenuController">
     <columnConstraints>
         <ColumnConstraints percentWidth="100"/>
     </columnConstraints>
