@@ -1,0 +1,26 @@
+.task {
+    text-align: center;
+    margin: 0 auto;
+    width: 750px;
+}
+
+#result {
+    color: darkgreen;
+    font-size: 30px;
+}
+
+input {
+    height: 40px;
+    width: 400px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.buttons {
+    width: 100%;
+}
+
+.button {
+    display: inline-block;
+    width: 200px;
+}

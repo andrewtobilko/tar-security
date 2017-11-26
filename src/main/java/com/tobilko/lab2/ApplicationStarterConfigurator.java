@@ -24,6 +24,7 @@ public final class ApplicationStarterConfigurator {
 
         stage.setScene(new Scene(loader.load()));
         stage.setTitle(TITLE);
+        stage.show();
     }
 
     public static void configureGlobalSecurityConfiguration() {

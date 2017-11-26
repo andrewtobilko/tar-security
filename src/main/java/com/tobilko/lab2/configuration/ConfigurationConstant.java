@@ -5,7 +5,7 @@ package com.tobilko.lab2.configuration;
  */
 public final class ConfigurationConstant {
 
-    public static final String PATH_TO_SCHEMA = "src/main/resources/lab2/application.fxml";
+    public static final String PATH_TO_SCHEMA = "src/setCookie/resources/lab2/application.fxml";
     public static final String TITLE = "Andrew Tobilko [lab #2]";
 
     private ConfigurationConstant() {}

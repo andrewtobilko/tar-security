@@ -9,7 +9,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 import java.net.URL;
 import java.security.PublicKey;
@@ -31,7 +30,6 @@ public final class CertificateTableController implements Initializable {
     private TableView<List<String>> table;
 
     @Override
-    @SneakyThrows
     public void initialize(URL location, ResourceBundle resources) {
         CertificateRepository repository = new CertificateRepository();
         List<X509Certificate> certificates = repository.getCertificates();
@@ -94,7 +92,6 @@ public final class CertificateTableController implements Initializable {
                     key.getFormat()
             ));
         }
-
     }
 
     private Map<String, String> parseIssuerInformation(String information) {
